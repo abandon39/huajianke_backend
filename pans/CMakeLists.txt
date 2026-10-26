@@ -11,7 +11,7 @@ target_include_directories(pans
 		${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(pans PUBLIC pans_option)    #继承所有编译/链接选项
+target_link_libraries(pans PUBLIC pans_options)    #继承所有编译/链接选项
 
 target_compile_options(pans PRIVATE
 	#主库需要更严格的警告

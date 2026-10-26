@@ -29,19 +29,19 @@ target_compile_definitions(pans_options INTERFACE
 target_compile_options(pans_options INTERFACE
 	$<$<CONFIG:Debug>:-O0>    #代码不重新编排，不优化
 	$<$<CONFIG:Debug>:-g3>    #生成更完整的调试信息，比-g更详细还有一些调试宏等
-	$<$<CONFIG:Debug>:--ggdb>    #生成适用于GDP调试信息的一些格式，偏格式选择
+	$<$<CONFIG:Debug>:-ggdb>    #生成适用于GDP调试信息的一些格式，偏格式选择
 )
 # Release/RelWithDebInfo 共用选项
 target_compile_options(pans_options INTERFACE
 	$<$<CONFIG:Release>:-DNDEBUG>    #noDebug
 	$<$<CONFIG:Release>:-O2>    #O2优化级别
-	$<$<CONFIG:Release>:-fno-omit-frame-opointer>    #尽可能保留栈指针，好像没什么用
-	
+	$<$<CONFIG:Release>:-fno-omit-frame-pointer>    #尽可能保留栈指针，好像没什么用
+
 	#Release带上Debug符号
 	$<$<CONFIG:RelWithDebInfo>:-DNDEBUG>
 	$<$<CONFIG:RelWithDebInfo>:-O2>
 	$<$<CONFIG:RelWithDebInfo>:-g>    #带上编译符号
-	$<$<CONFIG:RelWithDebInfo<:-fno-omit-frame-pointer>
+	$<$<CONFIG:RelWithDebInfo>:-fno-omit-frame-pointer>
 )
 
 option(ENABLE_COVERAGE "Enable code coverage instrumentation" OFF)
