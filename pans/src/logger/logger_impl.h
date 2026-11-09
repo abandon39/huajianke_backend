@@ -49,7 +49,7 @@ class LoggerAccess final
 public:
 	// 静态方法首字母大写以区分
 	static void Submit(Logger& logger, const LogRecordView& record) noexcept;
-	static void SetRoot(Logger& logger, LoggerPtr root) noexcept;
+	static void SetRoot(Logger& logger, const LoggerPtr& root) noexcept;
 };
 
 }

@@ -14,7 +14,7 @@
 namespace pans
 {
 // 定义一个logger_format，把支持的格式全都放进去
-constexpr std::string_view DEFAULT_LOG_PATTERN = "%d{%Y-%m-%d %H:%M:%S}.%u%Tthread-%t%Tfiber=%F%T[%p]%T%f:%l%T%m%n"
+constexpr std::string_view DEFAULT_LOG_PATTERN = "%d{%Y-%m-%d %H:%M:%S}.%u%Tthread-%t%Tfiber=%F%T[%p]%T%f:%l%T%m%n";
 Logger::Logger(std::string name)
 	: m_impl(std::make_unique<Impl>(std::move(name)))
 {}
@@ -43,7 +43,6 @@ std::string_view Logger::getName() const noexcept
 void Logger::setFormatter(std::string_view pattern)
 {
 	auto formatter = std::make_shared<const detail::Formatter>(pattern);
-	ASSERT_RETNONE2(formatter->isValid(), "invalid logger format pattern");
 	m_impl->setFormatter(std::move(formatter));
 }
 
@@ -53,28 +52,28 @@ std::string Logger::getFormatterPattern() const
 	return formatter == nullptr ? std::string() : formatter->getPattern();
 }
 
-void addAppender(AppenderPtr appender)
+void Logger::addAppender(AppenderPtr appender)
 {
 	m_impl->addAppender(appender);
 }
-void removeAppender(const AppenderPtr& appender)
+void Logger::removeAppender(const AppenderPtr& appender)
 {
 	m_impl->removeAppender(appender);
 }
-void clearAppenders()
+void Logger::clearAppenders()
 {
 	m_impl->clearAppenders();
 }
-void flush()
+void Logger::flush()
 {
 	m_impl->flush();
 }
-void sync()
+void Logger::sync()
 {
 	m_impl->sync();
 }
 Logger::Impl::Impl(std::string name)
-	: m_Name(std::move(name))
+	: m_name(std::move(name))
 {
 	if(m_name.empty())
 	{
@@ -165,7 +164,7 @@ void Logger::Impl::addAppender(AppenderPtr appender)
 {
 	ASSERT_RETNONE2(appender != nullptr, "logger appender cannot be null");
 	std::unique_lock<std::shared_mutex> lock(m_mutex);
-	m_appender.push_back(std::move(appender));
+	m_appenders.push_back(std::move(appender));
 }
 
 void Logger::Impl::removeAppender(const AppenderPtr& appender)
@@ -225,9 +224,9 @@ void detail::LoggerAccess::Submit(Logger& logger, const LogRecordView& record) n
 {
 	logger.m_impl->submit(record);
 }
-void detail::LoggerAccess::SetRoot(Logger& logger, LoggerPtr& root) noexcept
+void detail::LoggerAccess::SetRoot(Logger& logger, const LoggerPtr& root) noexcept
 {
-	logger.m_impl->SetRoot(root);
+	logger.m_impl->setRoot(root);
 }
 
 // 定义logManager

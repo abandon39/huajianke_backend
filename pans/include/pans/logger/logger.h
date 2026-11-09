@@ -44,7 +44,7 @@ public:
 	// 日志器CURD
 	void addAppender(AppenderPtr appender);
 	void removeAppender(const AppenderPtr& appender);
-	void clearppenders();
+	void clearAppenders();
 	
 	// 日志器刷新
 	void flush();
